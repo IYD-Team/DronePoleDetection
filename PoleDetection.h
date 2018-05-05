@@ -82,40 +82,40 @@ public:
 
 
     //
-    // ƒ|[ƒ‹‚Æ‚Ì‚¸‚ê‚ğŒvZ‚µ‚Ü‚·.
-    // ‰æ‘œ’†‰›‚©‚ç‚Ì‚¸‚ê‚Å‚·.
+    // ãƒãƒ¼ãƒ«ã¨ã®ãšã‚Œã‚’è¨ˆç®—ã—ã¾ã™.
+    // ç”»åƒä¸­å¤®ã‹ã‚‰ã®ãšã‚Œã§ã™.
     //
     // @param left:
-    //  ¶ƒJƒƒ‰‰æ‘œ
+    //  å·¦ã‚«ãƒ¡ãƒ©ç”»åƒ
     //
     // @param right:
-    //  ‰EƒJƒƒ‰‰æ‘œ
+    //  å³ã‚«ãƒ¡ãƒ©ç”»åƒ
     //
     // @param deltaX:
-    //  ‚¸‚êŒvZŒ‹‰Ê.
+    //  ãšã‚Œè¨ˆç®—çµæœ.
     // 
     // @return:
-    //  true‚Ì‚Æ‚«‚Í³í‚ÉŒvZ‚Å‚«‚½.
-    //  false‚Ì‚Æ‚«‚Í, ‰½‚ç‚©‚Ì——R‚ÅŒvZ‚Å‚«‚È‚©‚Á‚½.
-    //  ‰½‚ç‚©‚Ì——R‚Æ‚Í, ƒ|[ƒ‹‚ªŒŸ’m‚Å‚«‚È‚¢‚Æ‚«‚È‚Ç‚Å‚·.
+    //  trueã®ã¨ãã¯æ­£å¸¸ã«è¨ˆç®—ã§ããŸ.
+    //  falseã®ã¨ãã¯, ä½•ã‚‰ã‹ã®ç†ç”±ã§è¨ˆç®—ã§ããªã‹ã£ãŸ.
+    //  ä½•ã‚‰ã‹ã®ç†ç”±ã¨ã¯, ãƒãƒ¼ãƒ«ãŒæ¤œçŸ¥ã§ããªã„ã¨ããªã©ã§ã™.
     //
     bool CalculateDeltaX(InputArray left, InputArray right, double &deltaX) {
 
-        // ‰æ‘œƒTƒCƒY•ÏX‚É‚æ‚és—ñƒƒ‚ƒŠ‚ÌÄŠm•Û
+        // ç”»åƒã‚µã‚¤ã‚ºå¤‰æ›´ã«ã‚ˆã‚‹è¡Œåˆ—ãƒ¡ãƒ¢ãƒªã®å†ç¢ºä¿
         ResizeMatrix(left.getMat().rows, left.getMat().cols);
 
-        // StereoSGBM–@‚É‚æ‚é‹·ƒ}ƒbƒvŒvZ
+        // StereoSGBMæ³•ã«ã‚ˆã‚‹è¦–å·®ãƒãƒƒãƒ—è¨ˆç®—
         ssgbm->compute(left, right, dispLMat);
 
-        // ‰E‹“_‚©‚ç‚Ì‹·ŒvZ
+        // å³è¦–ç‚¹ã‹ã‚‰ã®è¦–å·®è¨ˆç®—
         rightMatcher->compute(right, left, dispRMat);
 
         //cout << dispLMat;
 
-        // ‹·ƒ}ƒbƒv‚ÌƒtƒBƒ‹ƒ^ˆ—(DisparityWLSFilter)
+        // è¦–å·®ãƒãƒƒãƒ—ã®ãƒ•ã‚£ãƒ«ã‚¿å‡¦ç†(DisparityWLSFilter)
         filter->filter(dispLMat, left, filteredDispMat, dispRMat);
 
-        // ƒOƒŒ[ƒXƒP[ƒ‹‰»
+        // ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«åŒ–
         double min, max;
         cv::minMaxLoc(dispLMat, &min, &max);
         cv::convertScaleAbs(dispLMat, dispLMat, 255 / (max - min), 255 / min);
@@ -126,13 +126,13 @@ public:
         cv::minMaxLoc(filteredDispMat, &min, &max);
         cv::convertScaleAbs(filteredDispMat, filteredDispMat, 255 / (max - min), 255 / min);
 
-        // ƒtƒH[ƒJƒX•”Ø‚èæ‚è
+        // ãƒ•ã‚©ãƒ¼ã‚«ã‚¹éƒ¨åˆ‡ã‚Šå–ã‚Š
         Mat focusedFilterDispMat(filteredDispMat, Rect((filteredDispMat.cols - edgesMat.cols) / 2, 0, edgesMat.cols, edgesMat.rows));
 
-        // Canny‚ÌƒGƒbƒW’Šo
+        // Cannyã®ã‚¨ãƒƒã‚¸æŠ½å‡º
         Canny(focusedFilterDispMat, edgesMat, 100, 200);
 
-        // Šm—¦ƒnƒt•ÏŠ·‚É‚æ‚é’¼üŒŸo
+        // ç¢ºç‡ãƒãƒ•å¤‰æ›ã«ã‚ˆã‚‹ç›´ç·šæ¤œå‡º
         cvtColor(edgesMat, detectedLinesMat, CV_GRAY2BGR);
         vector<Vec4i> lines;
         HoughLinesP(edgesMat, lines, 1, CV_PI / 180, 50, 50, 10);
@@ -147,7 +147,7 @@ public:
         {
             Vec4i l = lines[i];
 
-            // ‚’¼ü‚Ì‚İ‘I‘ğ
+            // å‚ç›´ç·šã®ã¿é¸æŠ
             if (std::abs(l[0] - l[2]) < 5) {
                 double posX = (l[0] + l[2]) / 2.0;
                 double length = std::sqrt((l[0] - l[2]) * (l[0] - l[2]) + (l[1] - l[3]) * (l[1] - l[3]));
@@ -161,7 +161,7 @@ public:
             }
         }
 
-        // ‚’¼ü‚ª‘¶İ‚µ‚È‚¢‚Æ‚«
+        // å‚ç›´ç·šãŒå­˜åœ¨ã—ãªã„ã¨ã
         if (detectedLineCount <= 0) {
             return false;
         }
