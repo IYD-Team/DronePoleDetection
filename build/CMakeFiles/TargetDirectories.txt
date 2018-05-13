@@ -1,0 +1,3 @@
+/home/nvidia/Documents/OpenCV/PoleDetection/git-repos/DronePoleDetection/build/CMakeFiles/rebuild_cache.dir
+/home/nvidia/Documents/OpenCV/PoleDetection/git-repos/DronePoleDetection/build/CMakeFiles/edit_cache.dir
+/home/nvidia/Documents/OpenCV/PoleDetection/git-repos/DronePoleDetection/build/CMakeFiles/main.dir

@@ -17,7 +17,7 @@
 using namespace std;
 
 #include <opencv2/opencv.hpp>
-#include <opencv2\ximgproc\disparity_filter.hpp>
+#include <opencv2/ximgproc/disparity_filter.hpp>
 using namespace cv;
 
 
@@ -65,9 +65,15 @@ int main() {
     // >> カメラデバイス番号は適宜変えてください.
     // >> 
     // ********************************************************
-    cv::VideoCapture captureL(0);
-    cv::VideoCapture captureR(2);
+    cv::VideoCapture captureL(1);
+    //cv::VideoCapture captureR(1);
 
+    //if(!captureL.isOpened() || !captureR.isOpened()){
+    if(!captureL.isOpened()){
+        cout << "CaptureDevice cant open." << endl;
+
+	return 1;
+    }
 
     cv::namedWindow("Right Image", CV_WINDOW_AUTOSIZE);
     cv::namedWindow("Left Image", CV_WINDOW_AUTOSIZE);
@@ -89,7 +95,8 @@ int main() {
         
 
         captureL >> frameL;
-        captureR >> frameR;
+        captureL >> frameR;
+        //captureR >> frameR;
 
         cvtColor(frameL, imgL, CV_RGB2GRAY);
         cvtColor(frameR, imgR, CV_RGB2GRAY);

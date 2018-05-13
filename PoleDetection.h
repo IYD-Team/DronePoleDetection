@@ -8,7 +8,7 @@
 using namespace std;
 
 #include <opencv2/opencv.hpp>
-#include <opencv2\ximgproc\disparity_filter.hpp>
+#include <opencv2/ximgproc/disparity_filter.hpp>
 using namespace cv;
 
 
@@ -44,7 +44,7 @@ public:
     Mat edgesMat;
     Mat detectedLinesMat;
 
-    double focusRange = 0.8;
+    double focusRange;
 
 
     PoleDetection() {
@@ -77,6 +77,8 @@ public:
         rightMatcher = ximgproc::createRightMatcher(ssgbm);
 
         filter = ximgproc::createDisparityWLSFilter(ssgbm);
+
+        focusRange = 0.8;
     }
 
 
